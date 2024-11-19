@@ -1,95 +1,113 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client'; 
 
-export default function Home() {
+import { useState } from 'react';
+
+const TodoList = () => {
+  const [task, setTask] = useState('');
+  const [tasks, setTasks] = useState([]);
+
+  
+  const addTask = () => {
+    if (task.trim()) {
+      setTasks([...tasks, { task, isCompleted: false }]);
+      setTask('');
+    }
+  };
+
+ 
+  const toggleCompletion = (index) => {
+    const updatedTasks = tasks.map((t, i) =>
+      i === index ? { ...t, isCompleted: !t.isCompleted } : t
+    );
+    setTasks(updatedTasks);
+  };
+
+ 
+  const deleteTask = (index) => {
+    const updatedTasks = tasks.filter((_, i) => i !== index);
+    setTasks(updatedTasks);
+  };
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
+    <div className="todo-container">
+      <h1>To-Do List</h1>
+      
+      { }
+      <div className="input-container">
+        <input
+          type="text"
+          value={task}
+          onChange={(e) => setTask(e.target.value)}
+          placeholder="Enter a new task"
         />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.js</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+      </div>
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+      <button onClick={addTask}>Add a Task</button>
+      
+      { }
+      <ul className="task-list">
+        {tasks.map((t, index) => (
+          <li key={index} className={t.isCompleted ? 'completed' : ''}>
+            <input
+              type="checkbox"
+              checked={t.isCompleted}
+              onChange={() => toggleCompletion(index)}
             />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+            {t.task}
+            <button onClick={() => deleteTask(index)}>Delete</button>
+          </li>
+        ))}
+      </ul>
+
+      <style jsx>{`
+
+        .todo-container {
+          padding: 20px;
+          max-width: 750px;
+          margin: auto;
+          background-color: #6a5acd;
+          border-radius: 8px;
+
+        }
+        .input-container {
+          display: flex;
+          margin-bottom: 15px;
+        }
+        button {
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         padding: 6px 14px;
+         font-family: -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+         border-radius: 6px;
+         border: none;
+        }  
+        button:hover {
+          background-color: #b4b4b4
+        }
+        li {
+          display: flex;
+          align-items: center;
+          padding: 10px;
+          border-bottom: 1px solid #ddd;
+        }
+        li.completed {
+          text-decoration: line-through;
+          color: grey;
+        }
+
+        :global(body) {
+          background: url('https://marketplace.canva.com/EAE4zByjCKI/1/0/900w/canva-black-and-white-simple-motivation-phone-wallpaper-OKXDbZ05FS0.jpg') center fixed;
+          background-size: cover;
+        }
+
+      
+      
+      `}</style>
+
+     
     </div>
   );
-}
+};
+
+export default TodoList;
